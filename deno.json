@@ -1,8 +1,18 @@
 {
+     "nodeModulesDir": "auto",
+
   "tasks": {
-    "dev": "deno run --watch main.ts"
+    "dev": "deno run --watch -A --env-file main.ts"
   },
   "imports": {
-    "@std/assert": "jsr:@std/assert@1"
+    "@std/assert": "jsr:@std/assert@1",
+        "@db/postgres": "jsr:@db/postgres@0.19.5",
+      "bcrypt": "npm:bcrypt@^6.0.0",
+    "body-parser": "npm:body-parser@^2.2.1",
+    "cors": "npm:cors@^2.8.5",
+     "express": "npm:express",
+    "jsonwebtoken": "npm:jsonwebtoken@^9.0.3",
+    "sequelize": "npm:sequelize",
+    "pg": "npm:pg"
   }
 }
