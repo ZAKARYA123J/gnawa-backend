@@ -18,9 +18,9 @@ export class Event extends Model<IEvent, IEventCreationAttributes> implements IE
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
   public readonly deletedAt?: Date;
+     static readonly #DEFAULT_PREFIX = "Mr/Ms";
 
-
-  static initialize(sequelize: Sequelize): void {
+   static initialize(sequelize: Sequelize): void {
     Event.init(
       {
         id: {

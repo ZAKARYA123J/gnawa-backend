@@ -168,7 +168,7 @@ export class Booking extends Model<IBooking, IBookingCreationAttributes> impleme
           },
         ],
         hooks: {
-          beforeValidate: async (booking: Booking) => {
+          beforeValidate: (booking: Booking) => {
             // Générer un code de confirmation si non fourni
             if (!booking.confirmationCode) {
               booking.confirmationCode = Booking.generateConfirmationCode();
@@ -183,7 +183,7 @@ export class Booking extends Model<IBooking, IBookingCreationAttributes> impleme
       }
     );
   }
-  
+
   private static generateConfirmationCode(): string {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let code = '';

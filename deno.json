@@ -1,18 +1,28 @@
 {
-     "nodeModulesDir": "auto",
-
+  "nodeModulesDir": "auto",
   "tasks": {
     "dev": "deno run --watch -A --env-file main.ts"
   },
+  "compilerOptions": {
+    "lib": [
+      "deno.ns",
+      "deno.window",
+      "dom"
+    ]
+  },
   "imports": {
     "@std/assert": "jsr:@std/assert@1",
-        "@db/postgres": "jsr:@db/postgres@0.19.5",
-      "bcrypt": "npm:bcrypt@^6.0.0",
-    "body-parser": "npm:body-parser@^2.2.1",
+    "@db/postgres": "jsr:@db/postgres@0.19.5",
+    "bcrypt": "npm:bcrypt@^5.1.0",
+    "body-parser": "npm:body-parser@^1.20.2",
     "cors": "npm:cors@^2.8.5",
-     "express": "npm:express",
-    "jsonwebtoken": "npm:jsonwebtoken@^9.0.3",
+    "express": "npm:express@^4.18.2",
+    "jsonwebtoken": "npm:jsonwebtoken@^9.0.0",
     "sequelize": "npm:sequelize",
-    "pg": "npm:pg"
+    "pg": "npm:pg",
+    "@types/express": "npm:@types/express@^4.17.21",
+    "@types/cors": "npm:@types/cors",
+    "@types/bcrypt": "npm:@types/bcrypt",
+    "@types/jsonwebtoken": "npm:@types/jsonwebtoken"
   }
 }

@@ -164,6 +164,5 @@ export class Admin extends Model<IAdmin, IAdminCreationAttributes> implements IA
   }
 
   static associate(models: any): void {
-    // Pas d'associations nécessaires pour Admin
   }
 }
