@@ -1,7 +1,13 @@
-import { DataTypes, Model, Sequelize } from 'sequelize';
-import { IBooking, IBookingCreationAttributes } from '../interfaces/IBooking.ts';
+import { DataTypes, Model, Sequelize } from "sequelize";
+import {
+  IBooking,
+  IBookingCreationAttributes,
+} from "../interfaces/IBooking.ts";
 
-export class Booking extends Model<IBooking, IBookingCreationAttributes> implements IBooking {
+export class Booking
+  extends Model<IBooking, IBookingCreationAttributes>
+  implements IBooking
+{
   public id!: string;
   public confirmationCode!: string;
   public email!: string;
@@ -9,9 +15,9 @@ export class Booking extends Model<IBooking, IBookingCreationAttributes> impleme
   public phoneNumber?: string;
   public quantity!: number;
   public totalPrice!: number;
-  public status!: 'pending' | 'confirmed' | 'cancelled' | 'checked_in';
-  public paymentMethod?: 'credit_card' | 'cash' | 'bank_transfer' | 'online';
-  public paymentStatus!: 'pending' | 'paid' | 'failed' | 'refunded';
+  public status!: "pending" | "confirmed" | "cancelled" | "checked_in";
+  public paymentMethod?: "credit_card" | "cash" | "bank_transfer" | "online";
+  public paymentStatus!: "pending" | "paid" | "failed" | "refunded";
   public specialRequests?: string;
   public checkedInAt?: Date;
   public notes?: string;
@@ -34,6 +40,7 @@ export class Booking extends Model<IBooking, IBookingCreationAttributes> impleme
           type: DataTypes.STRING(20),
           allowNull: false,
           unique: true,
+          defaultValue: () => Booking.generateConfirmationCode(),
           validate: {
             notEmpty: {
               msg: "Le code de confirmation est requis",
@@ -107,17 +114,27 @@ export class Booking extends Model<IBooking, IBookingCreationAttributes> impleme
           },
         },
         status: {
-          type: DataTypes.ENUM('pending', 'confirmed', 'cancelled', 'checked_in'),
-          defaultValue: 'confirmed',
+          type: DataTypes.ENUM(
+            "pending",
+            "confirmed",
+            "cancelled",
+            "checked_in",
+          ),
+          defaultValue: "confirmed",
           allowNull: false,
         },
         paymentMethod: {
-          type: DataTypes.ENUM('credit_card', 'cash', 'bank_transfer', 'online'),
+          type: DataTypes.ENUM(
+            "credit_card",
+            "cash",
+            "bank_transfer",
+            "online",
+          ),
           allowNull: true,
         },
         paymentStatus: {
-          type: DataTypes.ENUM('pending', 'paid', 'failed', 'refunded'),
-          defaultValue: 'pending',
+          type: DataTypes.ENUM("pending", "paid", "failed", "refunded"),
+          defaultValue: "pending",
           allowNull: false,
         },
         specialRequests: {
@@ -136,35 +153,35 @@ export class Booking extends Model<IBooking, IBookingCreationAttributes> impleme
           type: DataTypes.UUID,
           allowNull: false,
           references: {
-            model: 'events',
-            key: 'id',
+            model: "events",
+            key: "id",
           },
         },
       },
       {
         sequelize,
-        tableName: 'bookings',
+        tableName: "bookings",
         timestamps: true,
         paranoid: true,
         indexes: [
           {
             unique: true,
-            fields: ['confirmationCode'],
+            fields: ["confirmationCode"],
           },
           {
-            fields: ['email'],
+            fields: ["email"],
           },
           {
-            fields: ['status'],
+            fields: ["status"],
           },
           {
-            fields: ['paymentStatus'],
+            fields: ["paymentStatus"],
           },
           {
-            fields: ['createdAt'],
+            fields: ["createdAt"],
           },
           {
-            fields: ['eventId'],
+            fields: ["eventId"],
           },
         ],
         hooks: {
@@ -180,13 +197,13 @@ export class Booking extends Model<IBooking, IBookingCreationAttributes> impleme
             }
           },
         },
-      }
+      },
     );
   }
 
   private static generateConfirmationCode(): string {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let code = '';
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let code = "";
     for (let i = 0; i < 8; i++) {
       code += chars.charAt(Math.floor(Math.random() * chars.length));
     }
@@ -195,8 +212,8 @@ export class Booking extends Model<IBooking, IBookingCreationAttributes> impleme
 
   static associate(models: any): void {
     Booking.belongsTo(models.Event, {
-      foreignKey: 'eventId',
-      as: 'event',
+      foreignKey: "eventId",
+      as: "event",
     });
   }
 }

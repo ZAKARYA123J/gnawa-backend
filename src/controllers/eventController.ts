@@ -21,7 +21,21 @@ export const getEvents = async (_req: Request, res: Response) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+export const getEventById = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const event = await Event.findByPk(id);
 
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    res.json(event);
+  } catch (error) {
+    console.error("Get event by ID error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 export const createEvent = async (req: Request, res: Response) => {
   try {
     const {

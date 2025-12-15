@@ -40,34 +40,83 @@ export const getArtistById = async (req: Request, res: Response) => {
 
 export const createArtist = async (req: Request, res: Response) => {
   try {
-    const { name, style, bio, photoUrl, schedule } = req.body;
+    const {
+      name,
+      genre,
+      biography,
+      photos = [],
+      performances = [],
+      website = null,
+      socialMedia = {},
+      isHeadliner = false,
+      performanceTime = null,
+      performanceDuration = null,
+    } = req.body;
 
-    // Basic validation
-    if (!name || !style || !bio) {
-      return res
-        .status(400)
-        .json({ message: "Name, style, and bio are required" });
+    // Required fields validation
+    if (!name || !genre || !biography) {
+      return res.status(400).json({
+        message: "Name, genre, and biography are required",
+      });
     }
-    if (typeof bio !== "string" || bio.length < 50 || bio.length > 10000) {
+
+    // Biography validation
+    if (
+      typeof biography !== "string" ||
+      biography.length < 50 ||
+      biography.length > 10000
+    ) {
       return res.status(400).json({
         field: "biography",
         message: "La biographie doit contenir entre 50 et 10000 caractères",
       });
     }
+
+    // Photos validation
+    if (!Array.isArray(photos)) {
+      return res.status(400).json({
+        field: "photos",
+        message: "Photos must be an array of URLs",
+      });
+    }
+
+    // Performances validation
+    if (!Array.isArray(performances)) {
+      return res.status(400).json({
+        field: "performances",
+        message: "Performances must be an array",
+      });
+    }
+    let parsedPerformanceTime: string | null = null;
+    if (performanceTime) {
+      const date = new Date(performanceTime);
+      if (!isNaN(date.getTime())) {
+        parsedPerformanceTime = date.toISOString(); // safe format for Postgres
+      } else {
+        parsedPerformanceTime = null; // fallback if invalid
+      }
+    }
+
     const newArtist = await Artist.create({
       name,
-      genre: style,
-      biography: bio,
-      photos: photoUrl ? [photoUrl] : [],
-      performances: schedule || [],
+      genre,
+      biography,
+      photos,
+      performances,
+      website,
+      socialMedia,
+      isHeadliner,
+      performanceTime: parsedPerformanceTime,
+      performanceDuration,
       status: "active",
-      isHeadliner: false,
     });
 
-    res.status(201).json(newArtist);
+    return res.status(201).json(newArtist);
   } catch (error) {
     console.error("Create artist error:", error);
-    res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({
+      message: "Internal server error",
+    });
   }
 };
 

@@ -7,6 +7,7 @@ import { initDb } from "./src/models/index.ts";
 import authRoutes from "./src/routes/authRoutes.ts";
 import eventRoutes from "./src/routes/eventRoutes.ts";
 import artistRoutes from "./src/routes/artistRoutes.ts";
+import bookingRoutes from "./src/routes/booking.ts";
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use((req: Request, _res: Response, next: NextFunction) => {
 app.use("/auth", authRoutes);
 app.use("/events", eventRoutes);
 app.use("/artists", artistRoutes);
+app.use("/bookings", bookingRoutes);
 
 app.listen(env.PORT, () => {
   console.log(`server running http://0.0.0.0:${env.PORT}`);
